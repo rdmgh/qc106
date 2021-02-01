@@ -1,6 +1,7 @@
 ```
 Readme
 ```
+```
 Tests written and passing	𝥀
 Continuous Integration build passing	𝥀
 Cross-browser testing done on current top 5 browsers according to analytics	𝥀
@@ -140,3 +141,4 @@ Acceptance
 PO accepts that user story and acceptance criteria have been fulfilled
 Design accepts feature for release to users if applicable
 Team asserts that all other applicable aspects of the DoD have been met
+```
