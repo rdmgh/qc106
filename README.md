@@ -1,144 +1,123 @@
 ```
-Readme
-```
-```
-Tests written and passing	𝥀
-Continuous Integration build passing	𝥀
-Cross-browser testing done on current top 5 browsers according to analytics	𝥀
-Mobile testing done on current top 3 mobile devices according to analytics	𝥀
-Google accessibility check passed	𝥀
-Code peer-reviewed	𝥀
-Documentation updated	𝥀
-Acceptance criteria met	𝥀
+#------------------------------------------------------------------------------
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#------------------------------------------------------------------------------
+# Filename: FindAndReplace.py
+# Purpose:  Simple find and replace string in files (recursive) script
+# Usage:	python FindAndReplace.py [Old String] [New String] 
+#				[File Filters(ex/default:".txt,.html,.erb")] [Directory To Check]
+# Requirement: Files must be text (non-binary) files 
+#              (this is why we force you to pick the file pattern/filter)
+# WARNING: This will overwrite files matching [File Filters]. All occurrences of [Old String] 
+#			will be replaced with [New String]. Make sure you really, really want to do this.
+#------------------------------------------------------------------------------
 
-The user story implementation meets ALL the acceptance criteria
-The Product Owner approved the user story
-The user story is deployed in Production environment but deactivated (toggle off)
-The unit tests were written, executed and passed
-Every acceptance criteria have at least a test case associated
-The team wrote, completed unit tests and they passed
-The Technical Documentation is uploaded by the team on Confluence
-The performance is under X
-There is no regression in the automation testing suite
-The user story has been peer-reviewed
-Integration testing performed and compiles
-The manual configurations that need to be performed after the deployment to production are marked in the user story
-The deployment to the production environment of the story has release notes
-End-user documentation is available
-The user interface is according to the design
-The code refactoring is completed
-Marketing communication of the changes are documented
+import os
+import sys
+import traceback
 
-that the code is clean,
-the code has been reviewed by at least one other person than the one who wrote it,
-unit tests pass,
-all test definitions pass,
-the interface complies to guidelines as per Style Guide
-release notes have been written, reviewed, and confirmed to be complete,
-it passes the performance-, security- and stress-tests
-it passes the build,
-it passes the user acceptance test where its functionality has been reviewed.
-its usage is being researched
-user satisfaction is being researched (UX)
-learnings through its development have been registered and shared, its complexities have been made transparent.
-the Scrum team had the opportunity to review and is still able to review
-stakeholders are able to review
+def usage():
+	print('Usage: python FindAndReplace.py [Old String] [New String] ' \
+		  '[File Filters(default:".txt,.html,.erb")] [Directory To Check(.)]')
 
-writing code, coding comments, unit testing, integration testing, release notes, design documents, etc. 
+def replaceStringInFile(fileName, oldStringToReplace, newString):
 
-Feature level tests
-Monitoring
+	if not(os.path.isfile(fileName) and os.access(fileName, os.W_OK)):
+		print("WARNING: Skipping...File does not exist or and is not writeable:" + fileName)
+		return False
 
-Story DoD
-Builds with no error
-Unit testing
-Code Review
-Browser/device compatibility testing
-Regression testing
-Automated tests are written & passed
-AC
-Accessibility WCAG AA at component level
+	fileUpdated = False
 
+	# credit/taken/adapted from: http://stackoverflow.com/a/4128194
+	# Read in old file
+	with open(fileName, 'r') as f:
+		newlines = []
+		for line in f.readlines():
+			if (oldStringToReplace in line) :
+				fileUpdated = True
+			line = line.replace(oldStringToReplace, newString)
+			newlines.append(line)
 
-Sprint DoD
-Documentation updated
-Refactoring completed
-Configuration & build changes documented
-Performance testing is completed
-Security modeling is completed
+	# Write changes to same file
+	if fileUpdated :
+		print("String Found and Updating File: " + fileName)
+		try:
+			with open(fileName, 'w') as f:
+				for line in newlines:
+					f.write(line)
+		except:
+			print('ERROR: Cannot open/access existing file for writing: ' + fileName)
 
+	return fileUpdated
 
-Release
-Rollback is documented
-Smoke tests are ready
-Communications are sent
-https://miro.medium.com/max/875/1*nKoZv6l6zL0HRpdyvcjaEw.png
+def main():
 
-Definition of DOne - 
-Quality and processes
+	try:
 
-Test data identified and updated
+		DEFAULT_PATH = '.'
 
-How can we help teams break it down
+		if len(sys.argv) < 3:
+			usage()
+			# old/new string required parameters, exit if not supplied
+			sys.exit(-1)
+		else:
+			oldString = sys.argv[1]
+			newString = sys.argv[2]
 
-Survey - 
-What doesn't meet DoR?
-Is it practical and achievable
+		if len(sys.argv) < 4:
+			patterns = ['.txt', '.html', '.erb']
+		else:
+			stringFilter = sys.argv[3]
+			patterns = stringFilter.split(',')
 
-Single product - multiple teams, different DoD
-what needs to be applied to? integrated product increment
+		if len(sys.argv) < 5:
+			path = DEFAULT_PATH
+		else:
+			path = sys.argv[4]
 
-Not making them stringent
+		print('[Old String]         : ' + oldString) 
+		print('[New String]         : ' + newString)
+		print('[File Filters]       : ' + ', '.join(patterns))
+		print('[Directory To Check] : ' + path)
 
-https://handbook.login.gov/articles/definition-of-done.html
+		if not os.path.exists(path):
+			raise Exception("Selected path does not exist: " + path)
 
-Definition of Done
-All stories must comply with the current Definition of Done in order to be considered Complete and Accepted. Some items might not apply to all stories, and conscious exceptions are OK.
+		# Walks through directory structure looking for files matching patterns
+		matchingFileList = \
+			[os.path.join(dp, f) \
+				for dp, dn, filenames in os.walk(path) \
+					for f in filenames \
+						if os.path.splitext(f)[1] in patterns]
 
-Expect this DoD to change over time.
+		print('Files found matching patterns: ' + str(len(matchingFileList)))
+		fileCount = 0
+		filesReplaced = 0
+		
+		for currentFile in matchingFileList:
+		
+			fileCount+=1
+			fileReplaced = replaceStringInFile(currentFile, oldString, newString)
+			if fileReplaced:
+				filesReplaced+=1
 
-Engineering
-0 errors 0 warnings in CodeClimate
-Tests have been written. New or modified features have feature coverage. Code coverage of the entire test suite is not reduced
-Ensure that our accessibility posture has been maintained or improved, preferably via automated aXe tests
-All code and tests have been merged to master in GitHub repo
-The application.yml configurations have been updated as needed in deployed environments
-Database indexes exist for any new queries
-The dashboard and sample SPs have been updated if necessary
-If multiple database migrations are necessary, the database migrations have been performed
-The story is deployed to Dev and/or INT environments
-Appropriate refactoring has been done as part of developing the story
-Modified slim files are converted to HTML-ERB
-Dead code has been pruned
-The login.gov design system is used in views
-New code must be free of medium and highlevel static and dynamic security vulnerabilities as reported by Snyk
-If the story will not be ready to be released to users or there is a serious possibility of failure then the changes are behind a feature flag
-Analytics logging has been updated and new events have been added if needed
-Design
-Interface / user journey changes are approved by design folks in order to release the story to production, or the story is controlled by a Feature Flag
-If a usability test is necessary, a usability test plan has been developed or there is a Jira issue for it
-Conforms to Section 508 standards by both manual and automated scanning methods
-The new design uses components from the design system
-Notify the design team when a new design component is not yet in the design system, so it can be added and the team can be notified.
-New components that aren’t a part of the design system are added if they’re used frequently
-Graphics and mockups are saved in design repository. If private mockup/design, save in login drive / design folder
-User journey/interface are connected to user personas and listed in the login handbook.
-Content
-Content changes are written, reviewed and approved.
-Content changes are complete for the contact center email templates and knowledge articles.
-Documentation
-If there is a potential security impact someone has told @Mo about it
-If we are affecting storage or transmission of PII somebody has told the privacy officer @richard.speidel
-The release management guide has been updated for changes to the deploy process
-The Entity Relationship Diagrams have been updated if the db schema has changed.
-The help content on the static site has been updated and new FAQ content has been created if necessary
-User journey/interface are connected to user personas and listed in the login handbook.
-Comms
-A description of the change has been written for the release notes to be communicated to partners
-A description of the change has been communicated to the contact center
-In extreme cases, a description of the change has been written and communicated directly to users
-Acceptance
-PO accepts that user story and acceptance criteria have been fulfilled
-Design accepts feature for release to users if applicable
-Team asserts that all other applicable aspects of the DoD have been met
+		print("Total Files Searched         : " + str(fileCount))
+		print("Total Files Replaced/Updated : " + str(filesReplaced))
+	
+	except Exception as err:
+		print(traceback.format_exception_only(type(err), err)[0].rstrip())
+		sys.exit(-1)
+
+if __name__ == '__main__':
+	main()
 ```
