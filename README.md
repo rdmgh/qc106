@@ -1,123 +1,16 @@
-```
-#------------------------------------------------------------------------------
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#------------------------------------------------------------------------------
-# Filename: FindAndReplace.py
-# Purpose:  Simple find and replace string in files (recursive) script
-# Usage:	python FindAndReplace.py [Old String] [New String] 
-#				[File Filters(ex/default:".txt,.html,.erb")] [Directory To Check]
-# Requirement: Files must be text (non-binary) files 
-#              (this is why we force you to pick the file pattern/filter)
-# WARNING: This will overwrite files matching [File Filters]. All occurrences of [Old String] 
-#			will be replaced with [New String]. Make sure you really, really want to do this.
-#------------------------------------------------------------------------------
+Consultant Frontend Web
 
-import os
-import sys
-import traceback
+Required
+- Expert understanding of Web frameworks - Angular, Bootstrap, CSS Preprocessors, and performance optimization
+- Expert knowledge of Retail Banking widget collection
 
-def usage():
-	print('Usage: python FindAndReplace.py [Old String] [New String] ' \
-		  '[File Filters(default:".txt,.html,.erb")] [Directory To Check(.)]')
-
-def replaceStringInFile(fileName, oldStringToReplace, newString):
-
-	if not(os.path.isfile(fileName) and os.access(fileName, os.W_OK)):
-		print("WARNING: Skipping...File does not exist or and is not writeable:" + fileName)
-		return False
-
-	fileUpdated = False
-
-	# credit/taken/adapted from: http://stackoverflow.com/a/4128194
-	# Read in old file
-	with open(fileName, 'r') as f:
-		newlines = []
-		for line in f.readlines():
-			if (oldStringToReplace in line) :
-				fileUpdated = True
-			line = line.replace(oldStringToReplace, newString)
-			newlines.append(line)
-
-	# Write changes to same file
-	if fileUpdated :
-		print("String Found and Updating File: " + fileName)
-		try:
-			with open(fileName, 'w') as f:
-				for line in newlines:
-					f.write(line)
-		except:
-			print('ERROR: Cannot open/access existing file for writing: ' + fileName)
-
-	return fileUpdated
-
-def main():
-
-	try:
-
-		DEFAULT_PATH = '.'
-
-		if len(sys.argv) < 3:
-			usage()
-			# old/new string required parameters, exit if not supplied
-			sys.exit(-1)
-		else:
-			oldString = sys.argv[1]
-			newString = sys.argv[2]
-
-		if len(sys.argv) < 4:
-			patterns = ['.txt', '.html', '.erb']
-		else:
-			stringFilter = sys.argv[3]
-			patterns = stringFilter.split(',')
-
-		if len(sys.argv) < 5:
-			path = DEFAULT_PATH
-		else:
-			path = sys.argv[4]
-
-		print('[Old String]         : ' + oldString) 
-		print('[New String]         : ' + newString)
-		print('[File Filters]       : ' + ', '.join(patterns))
-		print('[Directory To Check] : ' + path)
-
-		if not os.path.exists(path):
-			raise Exception("Selected path does not exist: " + path)
-
-		# Walks through directory structure looking for files matching patterns
-		matchingFileList = \
-			[os.path.join(dp, f) \
-				for dp, dn, filenames in os.walk(path) \
-					for f in filenames \
-						if os.path.splitext(f)[1] in patterns]
-
-		print('Files found matching patterns: ' + str(len(matchingFileList)))
-		fileCount = 0
-		filesReplaced = 0
-		
-		for currentFile in matchingFileList:
-		
-			fileCount+=1
-			fileReplaced = replaceStringInFile(currentFile, oldString, newString)
-			if fileReplaced:
-				filesReplaced+=1
-
-		print("Total Files Searched         : " + str(fileCount))
-		print("Total Files Replaced/Updated : " + str(filesReplaced))
-	
-	except Exception as err:
-		print(traceback.format_exception_only(type(err), err)[0].rstrip())
-		sys.exit(-1)
-
-if __name__ == '__main__':
-	main()
-```
+Responsibilities
+- Lead design and implementation of architecturally significant components, reusable components and shared libraries
+- Champion development standards and best practices for clean, maintainable, and testable code
+- Mentor and train mid-tier engineers to enforce development standards and best practices
+- Define application platform architectural guidelines, articulate reasoning and trade-offs of choices
+- Refinement of technical initiatives into workable stories
+- Guide estimates and work execution appropriate for design and development of solutions in alignment with business needs and consistent with architectural vision
+- Review code to ensure stability, performance and security
+- Lead performance triaging to identify bottlenecks and resolution
+- Identify and support application instrumentation, monitoring and recovery needs
