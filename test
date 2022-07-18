@@ -1,0 +1,48 @@
+
+
+Service level objectives and performance benchmarking for core components
+
+Omnichannel is next generation platform serving our member and employees via multiple channels - web, mobile, conversational/chatbots, oneview etc. These channels are served by a set of shared APIs and supporting components to sync data from sources into DBS reference stores. 
+
+Some of these sync processes are initiated by login, but they are also triggered by event schedulers at configured intervals to maintain data freshness.
+
+Traditional (v6) channel performance testing is user journey focused benchmarking and a similar approach has been used so far to establish baselines for v7 platform.
+
+As channels will be onboarded to Omni platform at a variable rate based on a number of decision points, it is vital to establish Service Level Objectives for each of the platform components to ensure high quality experiences for the stakeholders
+
+Current state of usage:
+- OneView [Rolled out to all MSRs]
+- Aggregators/Open Banking [Target Q3]
+- Member Segments [Invite]
+
+Components in scope:
+
+Cursor APIs:
+1. Product Cursor 
+2. Transaction Cursor
+3. Details Cursor
+
+Sync components:
+1. Product Sync
+2. Transaction Sync
+3. Details Sync
+
+DBS APIs:
+1. Arrangements (Product Summary and Details)
+2. Transactions
+3. Money Movement
+4. Statements
+5. Card Management
+6. Authentication
+
+PreReq:
+On demand scaling of Omni performance environment for system components under test
+
+Definition
+Threshold
+Latency
+
+Usage in prod
+
+https://cloud.google.com/monitoring/api/ref_v3/rest
+https://k6.io/blog/integrating-load-testing-with-azure-pipelines/
